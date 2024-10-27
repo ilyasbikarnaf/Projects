@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="upgrade-insecure-requests"
+    />
+
+    <title>Weather App</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+
+    <link rel="stylesheet" href="weather.css" />
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3-LFSEZF1c-Fh0QbK55OmOqPLOQcg21c&libraries=places"></script>
+  </head>
+  <body>
+    <header class="header" id="header">
+      <div class="search-div">
+        <input
+          class="search-bar"
+          type="text"
+          placeholder="Search Here..."
+          id="searchTextField"
+        />
+        <a href="#" class="search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </header>
+
+    <div class="container">
+      <aside>
+        <div class="weather-quality">
+          <div class="date">
+            <p class="day">day</p>
+            <p class="time">time</p>
+          </div>
+
+          <p class="city">city</p>
+          <p class="temperature">10</p>
+          <img src="#" alt="weather status" class="weather-status" />
+          <p class="weather-status-text">weather status text</p>
+          <div class="temperature-high-down">
+            <p class="lowest-temperature">Low: 10</p>
+            <p class="highest-temperature">High: 12</p>
+          </div>
+        </div>
+
+        <div class="daily-forecast-5">
+          <p class="daily-forecast-title">
+            <i class="fa-solid fa-calendar"></i> 5 Day Forecast for something
+          </p>
+          <div class="days-forecast day-1">
+            <p class="day-1-after">day 1 name</p>
+            <div class="high-low-text">
+              <p>(low)</p>
+              <p>(high)</p>
+            </div>
+            <div class="temperature-numeric-informations">
+              <p class="low-temp-1">low temp</p>
+              <div class="temperature-bar"></div>
+              <p class="max-temp-1">high-temp</p>
+            </div>
+          </div>
+          <div class="days-forecast day-2">
+            <p class="day-2-after">day 2 name</p>
+            <div class="high-low-text">
+              <p>(low)</p>
+              <p>(high)</p>
+            </div>
+            <div class="temperature-numeric-informations">
+              <p class="low-temp-2">low temp</p>
+              <div class="temperature-bar"></div>
+              <p class="max-temp-2">high-temp</p>
+            </div>
+          </div>
+          <div class="days-forecast day-3">
+            <p class="day-3-after">day 3 name</p>
+            <div class="high-low-text">
+              <p>(low)</p>
+              <p>(high)</p>
+            </div>
+            <div class="temperature-numeric-informations">
+              <p class="low-temp-3">low temp</p>
+              <div class="temperature-bar"></div>
+              <p class="max-temp-3">high-temp</p>
+            </div>
+          </div>
+          <div class="days-forecast day-4">
+            <p class="day-4-after">day 4 name</p>
+            <div class="high-low-text">
+              <p>(low)</p>
+              <p>(high)</p>
+            </div>
+            <div class="temperature-numeric-informations">
+              <p class="low-temp-4">low temp</p>
+              <div class="temperature-bar"></div>
+              <p class="max-temp-4">high-temp</p>
+            </div>
+          </div>
+          <div class="days-forecast day-5">
+            <p class="day-5-after">day 5 name</p>
+            <div class="high-low-text">
+              <p>(low)</p>
+              <p>(high)</p>
+            </div>
+            <div class="temperature-numeric-informations">
+              <p class="low-temp-5">low temp</p>
+              <div class="temperature-bar"></div>
+              <p class="max-temp-5">high-temp</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <main>
+        <div class="air-pollution main-item">
+          <h3>Air Pollution</h3>
+          <div class="air-pollution-bar">
+            <button class="air-pollution-bar-button"></button>
+          </div>
+          <p class="air-quality">Air quality is good</p>
+        </div>
+
+        <div class="sunset main-item">
+          <h3>Sunset</h3>
+          <p class="sunset-time">17:16</p>
+          <p class="sunrise-time">07:11</p>
+        </div>
+
+        <div class="wind-speed main-item">
+          <h3>Wind Speed</h3>
+          <p class="wind-speed-value">1 m/s</p>
+          <p class="wind-speed-commentary">quite fast</p>
+        </div>
+
+        <!-- <div class="wind-speed main-item">
+          <p>I am supposed to have a compass here</p>
+        </div> -->
+
+        <div class="hourely-forecast main-item">
+          <!-- <p>I am supposed to have an hourly forecast here</p> -->
+          <div class="hourely-container">
+            <div class="hour-1 hourely">
+              <p class="time-1">time</p>
+              <img
+                src=""
+                alt="hourely forecast weather"
+                class="hourely-img-1"
+              />
+              <p class="hourely-temperature-1">temperature</p>
+            </div>
+            <div class="hour-2 hourely">
+              <p class="time-2">time</p>
+              <img
+                src=""
+                alt="hourely forecast weather"
+                class="hourely-img-2"
+              />
+              <p class="hourely-temperature-2">temperature</p>
+            </div>
+            <div class="hour-3 hourely">
+              <p class="time-3">time</p>
+              <img
+                src=""
+                alt="hourely forecast weather"
+                class="hourely-img-3"
+              />
+              <p class="hourely-temperature-3">temperature</p>
+            </div>
+            <div class="hour-4 hourely">
+              <p class="time-4">time</p>
+              <img
+                src=""
+                alt="hourely forecast weather"
+                class="hourely-img-4"
+              />
+              <p class="hourely-temperature-4">temperature</p>
+            </div>
+            <div class="hour-5 hourely">
+              <p class="time-5">time</p>
+              <img
+                src=""
+                alt="hourely forecast weather"
+                class="hourely-img-5"
+              />
+              <p class="hourely-temperature-5">temperature</p>
+            </div>
+            <div class="hour-6 hourely">
+              <p class="time-6">time</p>
+              <img
+                src=""
+                alt="hourely forecast weather"
+                class="hourely-img-6"
+              />
+              <p class="hourely-temperature-6">temperature</p>
+            </div>
+            <div class="hour-7 hourely">
+              <p class="time-7">time</p>
+              <img
+                src=""
+                alt="hourely forecast weather"
+                class="hourely-img-7"
+              />
+              <p class="hourely-temperature-7">temperature</p>
+            </div>
+            <div class="hour-8 hourely">
+              <p class="time-8">time</p>
+              <img
+                src=""
+                alt="hourely forecast weather"
+                class="hourely-img-8"
+              />
+              <p class="hourely-temperature-8">temperature</p>
+            </div>
+          </div>
+        </div>
+        <div class="uv main-item">
+          <h3 class="uv-index">Uv Index</h3>
+          <p class="uv-value-amount">2(Low)</p>
+          <div class="uv-bar">
+            <button class="uv-bar-button"></button>
+          </div>
+          <p class="uv-protection">No protection required</p>
+        </div>
+        <div class="population main-item">
+          <h3>Population</h3>
+          <p class="population-of-city">13k</p>
+          <p class="population-commentary"></p>
+        </div>
+
+        <div class="feels-like main-item">
+          <h3>Feels Like</h3>
+          <p class="feels-like-temperature">8</p>
+          <p class="feels-like-commentary">
+            Feels close to the actual temperature
+          </p>
+        </div>
+
+        <div class="humidity main-item">
+          <h3>Humidity</h3>
+          <p class="humidity-percentage">62%</p>
+          <p class="humidity-commentary">Moderate</p>
+        </div>
+
+        <div class="visibility main-item">
+          <h3>Visibility</h3>
+          <p class="visibility-distance">6 km</p>
+          <p class="visibility-commentary">Good: Easily navigable</p>
+        </div>
+
+        <div class="pressure main-item">
+          <h3>Pressure</h3>
+          <p class="pressure-value">1013 hPa</p>
+          <p class="pressure-commentary">Normal Pressure</p>
+        </div>
+
+        <div class="map main-item" id="map"></div>
+
+        <div class="last-search-div">
+          <div class="latest-searches-title"><h3>recent searches</h3></div>
+          <div class="latest-searches main-item"></div>
+        </div>
+      </main>
+    </div>
+
+    <script src="weather.js"></script>
+  </body>
+</html>
