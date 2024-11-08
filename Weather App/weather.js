@@ -34,13 +34,13 @@ L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
     '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }).addTo(map);
 
-//Searching for city
+//city searching function
 async function searchCity(e) {
   document.querySelector(".container").style.filter = "blur(9px)";
   document.querySelector(".container").style.visibility = "visible";
 
   try {
-    // functions
+    // all used functions
 
     function uvLevels(value) {
       if (value < 0) return "Invalid";
@@ -118,11 +118,11 @@ async function searchCity(e) {
       localStorage.setItem("last-search", JSON.stringify(last_search));
     };
 
-    // everything important
+    // main details
 
     if (JSON.parse(localStorage.getItem("last-search")))
       last_search = JSON.parse(localStorage.getItem("last-search"));
-    // console.log(last_search)
+
 
     if (
       last_search.length >=
