@@ -1,0 +1,71 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.allMessage {
+  display: flex;
+}
+
+.userImg {
+  border-radius: 50%;
+  width: 30px;
+  height : 30px;
+  margin-bottom: 4px;
+}
+
+.messageWrapper {
+  background-color: #3b89f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-height: 200px;
+  overflow-y: scroll;
+  max-width: 200px;
+  border-radius: 4px 4px 4px 0;
+  color: #ffffff;
+  padding: 12px;
+  margin-left: 10px;
+  align-self: baseline;
+  padding: 12px;
+}
+
+.myMessageWrapper {
+  /* background-color: #4e41fb; */
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 10px;
+
+  /* justify-content: center; */
+  /* align-items: center; */
+  /* max-height: 50px; */
+  /* max-width: 200px; */
+  /* border-radius: 4px 4px 4px 0; */
+  /* color: #ffffff; */
+  padding: 10px;
+}
+
+.myUserWrapper {
+  border-radius: 4px 4px 0 4px;
+  background-color: #4e41fb;
+  align-self: baseline;
+  padding: 12px;
+}
+
+.userWrapper {
+  border-radius: 4px 4px 0 4px;
+  background-color: #4e41fb;
+}
+
+.imgAndDate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: flex-end;
+  margin-top: 30px;
+}
+
+.date {
+  font-size: 14px;
+}

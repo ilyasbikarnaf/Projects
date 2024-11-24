@@ -1,0 +1,12 @@
+.container {
+  height : 100vh;
+  width : 1000px;
+  margin : 150px auto 0;
+}
+
+
+.itemsContainer {
+  display : flex;
+
+}
+

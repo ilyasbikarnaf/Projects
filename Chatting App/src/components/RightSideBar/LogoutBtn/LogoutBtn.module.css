@@ -1,0 +1,20 @@
+
+.logout {
+  color: #ffffff;
+  background-color: #326bc4;
+  padding: 10px;
+  text-align: center;
+  border-radius: 20px;
+  width: 70%;
+  cursor: pointer;
+}
+
+
+.buttons{
+  display : flex;
+  flex-direction: column;
+  width : 100%;
+  gap : 20px;
+  align-items: center;
+
+}

@@ -1,0 +1,18 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.usersContainer {
+  background-color: #010a30;
+  padding: 20px;
+  width: 300px;
+  height: 600px;
+  overflow-y: scroll;
+}
+
+.active {
+  opacity: 0.8;
+  background-color: yellow;
+}

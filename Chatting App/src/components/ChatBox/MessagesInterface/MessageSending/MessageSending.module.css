@@ -1,0 +1,44 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.submitMessages {
+  width: 80%;
+  height: 100%;
+  margin-left: 5px;
+  outline: none;
+  border: none;
+  background-color: #ffffff;
+  padding-left: 10px;
+  border-radius: 10px;
+}
+
+.message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 23px;
+}
+
+.imageIcon {
+  width: 30px;
+}
+
+.imageBtn {
+  cursor: pointer;
+}
+
+.sendIcon {
+  width: 40px;
+}
+
+.sendIcon {
+  transition: all 1s;
+  cursor: pointer;
+}
+
+/* .sendIcon:active {
+  transform: scale(1.2);
+} */
