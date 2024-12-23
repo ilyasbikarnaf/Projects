@@ -23,7 +23,7 @@ let visibility_distance = document.querySelector(".visibility-distance");
 let pressure_value = document.querySelector(".pressure-value");
 let wind_speed_value = document.querySelector(".wind-speed-value");
 
-const api_key = '5a6f4278beee9c6b1dfcbedfce7ccfe9';
+const api_key = API_KEY;
 
 let last_search = [];
 
