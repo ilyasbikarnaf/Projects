@@ -7,7 +7,7 @@ import ProfilePage from "./pages/Profile_Page/ProfilePage";
 import { useEffect, useState } from "react";
 import { auth } from "./components/firebase";
 
-function App() {
+ function App() {
   const [user, setUser] = useState("");
 
   useEffect(() => {
