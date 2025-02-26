@@ -1,9 +1,8 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 import { UnionOmit } from "../utils/types";
+import { COLORS } from "./useEvents";
 
-const COLORS = ["red", "blue", "green"] as const;
-
-type Event = {
+export type Event = {
   id: string;
   name: string;
   color: (typeof COLORS)[number];
@@ -18,7 +17,7 @@ type EventsContext = {
   addEvent: (event: UnionOmit<Event, "id">) => void;
 };
 
-const Context = createContext<EventsContext | null>(null);
+export const Context = createContext<EventsContext | null>(null);
 
 type EventProviderProps = {
   children: ReactNode;
@@ -34,14 +33,4 @@ export function EventsProvider({ children }: EventProviderProps) {
   return (
     <Context.Provider value={{ events, addEvent }}>{children}</Context.Provider>
   );
-}
-
-export function useEvents() {
-  const value = useContext(Context);
-
-  if (value == null) {
-    throw new Error("useEvents must be used within an EventProvider");
-  }
-
-  return value;
 }
