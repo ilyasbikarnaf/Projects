@@ -9,12 +9,14 @@ export type Event = {
   date: Date;
 } & (
   | { allDay: true; startTime?: never; endTime?: never }
-  | { allDay: false; startTime: Date; endTime: Date }
+  | { allDay: false; startTime: string; endTime: string }
 );
 
 type EventsContext = {
   events: Event[];
   addEvent: (event: UnionOmit<Event, "id">) => void;
+  updateEvent: (id: string, updatedEvent: UnionOmit<Event, "id">) => void;
+  deleteEvent: (id: string) => void;
 };
 
 export const Context = createContext<EventsContext | null>(null);
@@ -30,7 +32,21 @@ export function EventsProvider({ children }: EventProviderProps) {
     setEvents((e) => [...e, { ...event, id: crypto.randomUUID() }]);
   }
 
+  function updateEvent(id: string, updatedEvent: UnionOmit<Event, "id">) {
+    setEvents((e) =>
+      e.map((event) => {
+        return event.id === id ? { id, ...updatedEvent } : event;
+      })
+    );
+  }
+
+  function deleteEvent(id: string) {
+    setEvents((e) => e.filter((event) => event.id !== id));
+  }
+
   return (
-    <Context.Provider value={{ events, addEvent }}>{children}</Context.Provider>
+    <Context.Provider value={{ events, addEvent, updateEvent, deleteEvent }}>
+      {children}
+    </Context.Provider>
   );
 }

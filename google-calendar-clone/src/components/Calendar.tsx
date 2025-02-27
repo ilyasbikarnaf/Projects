@@ -6,13 +6,15 @@ import {
   endOfMonth,
   endOfWeek,
   isBefore,
+  isSameDay,
   isSameMonth,
   isToday,
+  parse,
   startOfMonth,
   startOfWeek,
   subMonths,
 } from "date-fns";
-import { Fragment, useId, useMemo, useRef, useState } from "react";
+import { FormEvent, Fragment, useId, useMemo, useRef, useState } from "react";
 import { formatDate } from "../utils/formatDate";
 import cc from "../utils/cc";
 import { COLORS, useEvents } from "../context/useEvents";
@@ -29,6 +31,8 @@ export default function Calendar() {
       end: endOfWeek(endOfMonth(selectedMonth)),
     });
   }, [selectedMonth]);
+
+  const { events } = useEvents();
 
   return (
     <div className="calendar">
@@ -62,6 +66,7 @@ export default function Calendar() {
               day={day}
               selectedMonth={selectedMonth}
               showWeekName={idx <= 6}
+              events={events.filter((event) => isSameDay(day, event.date))}
             />
           );
         })}
@@ -74,11 +79,33 @@ type CalendarDateProps = {
   day: Date;
   selectedMonth: Date;
   showWeekName: boolean;
+  events: Event[];
 };
 
-function CalendarDay({ day, selectedMonth, showWeekName }: CalendarDateProps) {
+function CalendarDay({
+  day,
+  selectedMonth,
+  showWeekName,
+  events,
+}: CalendarDateProps) {
   const [isNewEventModalOpen, setIsNewEventModalOpen] = useState(false);
   const { addEvent } = useEvents();
+
+  const sortedEvents = useMemo(() => {
+    const timeToNumber = (time: string) => parseFloat(time.replace(":", ","));
+
+    return [...events].sort((a, b) => {
+      if (a.allDay && b.allDay) {
+        return 0;
+      } else if (a.allDay) {
+        return -1;
+      } else if (b.allDay) {
+        return -1;
+      } else {
+        return timeToNumber(a.startTime) - timeToNumber(b.startTime);
+      }
+    });
+  }, [events]);
 
   return (
     <div
@@ -104,6 +131,14 @@ function CalendarDay({ day, selectedMonth, showWeekName }: CalendarDateProps) {
           +
         </button>
       </div>
+
+      <div className="events">
+        {sortedEvents?.length > 0 &&
+          sortedEvents.map((event) => {
+            return <CalendarEvent key={event.id} event={event} />;
+          })}
+      </div>
+
       <EventFormModal
         date={day}
         isOpen={isNewEventModalOpen}
@@ -111,6 +146,41 @@ function CalendarDay({ day, selectedMonth, showWeekName }: CalendarDateProps) {
         onSubmit={addEvent}
       />
     </div>
+  );
+}
+
+function CalendarEvent({ event }: { event: Event }) {
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const { updateEvent, deleteEvent } = useEvents();
+
+  return (
+    <>
+      <button
+        className={cc(event.allDay && "all-day-event", event.color, "event")}
+        onClick={() => setIsEditModalOpen(true)}
+      >
+        {event.allDay ? (
+          <div className="event-name">{event.name}</div>
+        ) : (
+          <>
+            <div className={cc("color-dot", event.color)}></div>
+            <div className="event-time">
+              {formatDate(parse(event.startTime, "HH:mm", event.date), {
+                timeStyle: "short",
+              })}
+            </div>
+            <div className="event-name">{event.name}</div>
+          </>
+        )}
+      </button>
+      <EventFormModal
+        event={event}
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        onDelete={() => deleteEvent(event.id)}
+        onSubmit={(newEvent) => updateEvent(event.id, newEvent)}
+      />
+    </>
   );
 }
 
@@ -134,11 +204,49 @@ function EventFormModal({
     event?.allDay || false
   );
   const [startTime, setStartTime] = useState(event?.startTime || "");
-  const endTimeRef = useRef<HTMLInputElement>(null)
-  const nameRef = useRef<HTMLInputElement>(null)
-  
+  const endTimeRef = useRef<HTMLInputElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
   const isNew = event == null;
   const formId = useId();
+
+
+
+  function handleSubmit(e: FormEvent) {
+    const name = nameRef.current?.value;
+    const endTime = endTimeRef.current?.value;
+    
+    e.preventDefault();
+    console.log(name)
+
+    if (name == null || name == "") return;
+    console.log('checked')
+
+    const commonProps = {
+      name,
+      date: date || event?.date,
+      color: selectedColor,
+    };
+
+    let newEvent: UnionOmit<Event, "id">;
+
+    if (isAllDayChecked) {
+      newEvent = { ...commonProps, allDay: true };
+    } else {
+      if (
+        startTime == null ||
+        startTime == "" ||
+        endTime == null ||
+        endTime == ""
+      ) {
+        return;
+      }
+
+      newEvent = { ...commonProps, allDay: false, startTime, endTime };
+    }
+
+    modalProps.onClose();
+    onSubmit(newEvent);
+  }
 
   return (
     <Modal {...modalProps}>
@@ -149,10 +257,16 @@ function EventFormModal({
           &times;
         </button>
       </div>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor={`${formId}-name`}>Name</label>
-          <input required type="text" id={`${formId}-name`} ref={nameRef} />
+          <input
+            required
+            type="text"
+            id={`${formId}-name`}
+            ref={nameRef}
+            defaultValue={event?.name}
+          />
         </div>
         <div className="form-group checkbox">
           <input
@@ -181,6 +295,7 @@ function EventFormModal({
             <input
               min={startTime}
               ref={endTimeRef}
+              defaultValue={event?.endTime}
               required={!isAllDayChecked}
               disabled={isAllDayChecked}
               type="time"
