@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 import { UnionOmit } from "../utils/types";
 import { COLORS } from "./useEvents";
 
@@ -26,7 +26,7 @@ type EventProviderProps = {
 };
 
 export function EventsProvider({ children }: EventProviderProps) {
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useLocalStorage("events", []);
 
   function addEvent(event: UnionOmit<Event, "id">) {
     setEvents((e) => [...e, { ...event, id: crypto.randomUUID() }]);
@@ -49,4 +49,25 @@ export function EventsProvider({ children }: EventProviderProps) {
       {children}
     </Context.Provider>
   );
+}
+
+function useLocalStorage(key: string, initialValue: Event[]) {
+  const [value, setValue] = useState<Event[]>(() => {
+    const localValue = localStorage.getItem(key);
+
+    if (localValue == null) return initialValue;
+
+    return (JSON.parse(localValue) as Event[]).map((event) => {
+      // is event.date of Date type
+      if (event.date instanceof Date) return event;
+
+      return { ...event, date: new Date(event.date) };
+    });
+  });
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [value, key]);
+
+  return [value, setValue] as const 
 }
