@@ -28,6 +28,8 @@ export default function Modal({ children, isOpen, onClose }: ModalProps) {
   });
 
   useLayoutEffect(() => {
+
+    
     if (prevIsOpen.current && !isOpen) {
       setIsClosing(true);
     }
